@@ -1,75 +1,66 @@
 
-const products = [
-  {
-    id: 1,
-    name: 'Basic Tee',
-    href: '#',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-01-related-product-01.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    color: 'Black',
-  },
-  {
-    id: 2,
-    name: 'Basic Tee',
-    href: '#',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-01-related-product-02.jpg',
-    imageAlt: "Front of men's Basic Tee in white.",
-    price: '$35',
-    color: 'Aspen White',
-  },
-  {
-    id: 3,
-    name: 'Basic Tee',
-    href: '#',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-01-related-product-03.jpg',
-    imageAlt: "Front of men's Basic Tee in dark gray.",
-    price: '$35',
-    color: 'Charcoal',
-  },
-  {
-    id: 4,
-    name: 'Artwork Tee',
-    href: '#',
-    imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-01-related-product-04.jpg',
-    imageAlt: "Front of men's Artwork Tee in peach with white and brown dots forming an isometric cube.",
-    price: '$35',
-    color: 'Iso Dots',
-  },
-]
-
+import axios from "axios"
+import { useEffect, useState } from "react"
+import { StarIcon } from '@heroicons/react/20/solid'
 export default function Product() {
-  return (
-    
-    <div className="bg-white">
-      <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-        <h2 className="text-2xl font-bold tracking-tight text-gray-900">Customers also purchased</h2>
 
-        <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-          {products.map((product) => (
-            <div key={product.id} className="group relative">
-              <img
-                alt={product.imageAlt}
-                src={product.imageSrc}
-                className="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80"
-              />
-              <div className="mt-4 flex justify-between">
-                <div>
-                  <h3 className="text-sm text-gray-700">
-                    <a href={product.href}>
-                      <span aria-hidden="true" className="absolute inset-0" />
-                      {product.name}
-                    </a>
-                  </h3>
-                  <p className="mt-1 text-sm text-gray-500">{product.color}</p>
+  const [products, setProducts] = useState([])
+
+  const fetchProducts = async () => {
+    const response = await axios.get("http://localhost:3000/api/product")
+    if (response.status === 200) {
+      setProducts(response.data.data)
+    }
+  }
+  useEffect(() => {
+    fetchProducts()
+  }, [])
+
+
+
+  return (
+
+
+    <div className="relative w-full">
+
+      <div className="relative bg-white-50">
+        <div className="container m-auto px-6 pt-32 md:px-12 lg:pt-[4.8rem] lg:px-7">
+          <h1 className="text-2xl font-bold text-yellow-900 md:text-3xl lg:w-10/12">Our Popular Foods</h1>
+
+          <div className="flex flex-wrap justify-between">
+
+          {
+            products.map((product)=>{
+              return(
+                <div key={product._id} className="mx-auto overflow-hidden duration-300 transform bg-white rounded-lg shadow-md mt-11 w-80 dark:bg-slate-800 hover:scale-105 hover:shadow-lg">
+              <img className="object-cover object-center w-full h-48" src= {product.productImage} alt="Product Image" />
+              <div className="p-4">
+                <h2 className="mb-2 text-lg font-medium text-gray-900 dark:text-white">{product.productName}</h2>
+                <p className="mb-2 text-base text-gray-700 dark:text-gray-300">{product.productDescription}</p>
+                <div className="flex items-center">
+                  <p className="mr-2 text-lg font-semibold text-gray-900 dark:text-white">Rs.{product.productPrice}</p>
+                  <p className="text-base font-medium text-gray-500 line-through dark:text-gray-300">25.00</p>
+                  <button className="px-4 py-2 mx-6 font-bold text-white bg-yellow-500 rounded hover:bg-yellow-600">
+                    Add to Cart
+                  </button>
                 </div>
-                <p className="text-sm font-medium text-gray-900">{product.price}</p>
               </div>
             </div>
-          ))}
+              )
+            })
+          }
+
+
+          </div>
         </div>
       </div>
     </div>
-    
+
+
+
+
   )
 }
+
+
+
